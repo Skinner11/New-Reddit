@@ -23,6 +23,6 @@ public class NewRedditPostController {
 
     @GetMapping(value = "/")
     public ResponseEntity<NewRedditPost> root() {
-        return new ResponseEntity<>((new NewRedditPost(counter.incrementAndGet(), "Ying Yang", "Eric Bachman is dead")), HttpStatus.OK);
+        return new ResponseEntity<>((new NewRedditPost(counter.incrementAndGet(), "Jian Yang", "Eric Bachman is dead")), HttpStatus.OK);
     }
 }
