@@ -1,10 +1,16 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- * Author:  Maffia
- * Created: 2019.09.21.
- */
+INSERT INTO REDDIT_USER (USER_ID, user_name, password) VALUES (1, 'xXVirs_LEEXx', 'asd123');
+INSERT INTO REDDIT_USER (USER_ID, user_name, password) VALUES (2, 'Sanyikah_osz_cso', '69xdxd');
+INSERT INTO REDDIT_USER (USER_ID, user_name, password) VALUES (3, 'Mier_nem_megy', 'kerdojel');
+
+INSERT INTO POST (POST_ID, BOO, YAAY, POSTER_ID) VALUES (1, 12, 3, 1);
+
+INSERT INTO POST_CONTENT (CONTENT_ID, IMAGE_URL, TEXT_CONTENT, TITLE, POST_ID) VALUES (1, null, 'sikerult adatbazits csinaljak', 'Hacker vagyok', 1);
+
+INSERT INTO COMMENT (COMMENT_ID, COMMENT_TEXT, POST_ID, COMMENTER_ID) VALUES (1, 'nice', 1, 1);
+INSERT INTO COMMENT (COMMENT_ID, COMMENT_TEXT, POST_ID, COMMENTER_ID) VALUES (2, 'nice', 1, 2);
+INSERT INTO COMMENT (COMMENT_ID, COMMENT_TEXT, POST_ID, COMMENTER_ID) VALUES (3, 'nice', 1, 3);
+
+
+
+
 
