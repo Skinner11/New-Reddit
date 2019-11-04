@@ -1,10 +1,13 @@
 package hu.elte.NewReddit.model;
 
+import hu.elte.NewReddit.model.enums.UserRole;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,6 +37,10 @@ public class User implements Serializable {
 
 	@Column(nullable = false)
 	private String password;
+
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private UserRole userRole;
 
 	// TODO subbredits
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
