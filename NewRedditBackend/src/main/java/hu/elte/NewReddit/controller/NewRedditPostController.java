@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class NewRedditPostController {
 
-    @GetMapping(value = "/")
-    public ResponseEntity<Long> root() {
-        return new ResponseEntity<>((new Long(12)), HttpStatus.OK);
-    }
+	@GetMapping(value = "")
+	public ResponseEntity<String> root() {
+		return new ResponseEntity(new String("Epstein Didn't Kill Himself"), HttpStatus.OK);
+	}
 }

@@ -1,5 +1,6 @@
 package hu.elte.NewReddit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -20,26 +21,29 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "POST")
+@Table(name = "REDDIT_POST")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Post implements Serializable {
+public class RedditPost implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "POST_ID")
 	private Long id;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "POSTER_ID", nullable = false)
 	private User user;
 
+	@JsonIgnore
 	@OneToOne(mappedBy = "post", cascade = CascadeType.ALL,
 			orphanRemoval = true, fetch = FetchType.LAZY)
 	private PostContent content;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL,
 			orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Comment> comments;

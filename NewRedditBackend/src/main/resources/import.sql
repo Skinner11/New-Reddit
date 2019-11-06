@@ -1,8 +1,9 @@
-INSERT INTO REDDIT_USER (USER_ID, user_name, password, user_role) VALUES (1, 'xXVirs_LEEXx', 'asd123', 'NORMAL');
-INSERT INTO REDDIT_USER (USER_ID, user_name, password, user_role) VALUES (2, 'Sanyikah_osz_cso', '69xdxd', 'NORMAL');
-INSERT INTO REDDIT_USER (USER_ID, user_name, password, user_role) VALUES (3, 'Mier_nem_megy', 'kerdojel', 'MODERATOR');
+INSERT INTO REDDIT_USER (USER_ID, username, password, user_role) VALUES (1, 'kill', 'me', 'NORMAL');
+INSERT INTO REDDIT_USER (USER_ID, username, password, user_role) VALUES (2, 'maya', 'hee', 'NORMAL');
+INSERT INTO REDDIT_USER (USER_ID, username, password, user_role) VALUES (3, 'mayaa', 'hoo', 'MODERATOR');
+INSERT INTO REDDIT_USER (USER_ID, username, password, user_role) VALUES (4, 'asd', 'asd', 'NORMAL');
 
-INSERT INTO POST (POST_ID, BOO, YAAY, POSTER_ID) VALUES (1, 12, 3, 1);
+INSERT INTO REDDIT_POST (POST_ID, BOO, YAAY, POSTER_ID) VALUES (1, 12, 3, 1);
 
 INSERT INTO POST_CONTENT (CONTENT_ID, IMAGE_URL, TEXT_CONTENT, TITLE, POST_ID) VALUES (1, null, 'sikerult adatbazits csinaljak', 'Hacker vagyok', 1);
 

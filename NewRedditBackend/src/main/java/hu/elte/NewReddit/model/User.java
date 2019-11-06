@@ -1,5 +1,6 @@
 package hu.elte.NewReddit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hu.elte.NewReddit.model.enums.UserRole;
 import java.io.Serializable;
 import java.util.List;
@@ -33,7 +34,7 @@ public class User implements Serializable {
 	private Long id;
 
 	@Column(nullable = false)
-	private String userName;
+	private String username;
 
 	@Column(nullable = false)
 	private String password;
@@ -43,11 +44,13 @@ public class User implements Serializable {
 	private UserRole userRole;
 
 	// TODO subbredits
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
 			orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Comment> comments;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
 			orphanRemoval = true, fetch = FetchType.LAZY)
-	private List<Post> posts;
+	private List<RedditPost> posts;
 }

@@ -5,10 +5,14 @@
  */
 package hu.elte.NewReddit.repository;
 
+import hu.elte.NewReddit.model.RedditPost;
+import hu.elte.NewReddit.model.User;
+import org.springframework.data.repository.CrudRepository;
+
 /**
  *
  * @author Csalad
  */
-public interface PostRepository {
+public interface RedditPostRepository extends CrudRepository<RedditPost, Long> {
 
 }

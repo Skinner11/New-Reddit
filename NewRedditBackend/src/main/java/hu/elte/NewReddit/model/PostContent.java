@@ -5,6 +5,7 @@
  */
 package hu.elte.NewReddit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,22 +29,23 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class PostContent implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "CONTENT_ID")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "CONTENT_ID")
+	private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "POST_ID", nullable = false, referencedColumnName = "POST_ID")
-    private Post post;
+	@JsonIgnore
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "POST_ID", nullable = false, referencedColumnName = "POST_ID")
+	private RedditPost post;
 
-    @Column(name = "TITLE", nullable = false)
-    private String title;
+	@Column(name = "TITLE", nullable = false)
+	private String title;
 
-    @Column(name = "TEXT_CONTENT", nullable = true)
-    private String text;
+	@Column(name = "TEXT_CONTENT", nullable = true)
+	private String text;
 
-    @Column(name = "IMAGE_URL", nullable = true)
-    private String imageUrl;
+	@Column(name = "IMAGE_URL", nullable = true)
+	private String imageUrl;
 
 }

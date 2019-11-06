@@ -5,10 +5,17 @@
  */
 package hu.elte.NewReddit.repository;
 
+import hu.elte.NewReddit.model.Comment;
+import hu.elte.NewReddit.model.User;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.data.repository.CrudRepository;
+
 /**
  *
  * @author Csalad
  */
-public interface CommentRepository {
+public interface CommentRepository extends CrudRepository<Comment, Long> {
 
+	Optional<List<Comment>> findAllByPost_id(Long id);
 }

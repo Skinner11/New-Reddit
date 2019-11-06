@@ -20,13 +20,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	@Autowired
-	protected void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-		auth
-				.userDetailsService(userDetailsService)
-				.passwordEncoder(passwordEncoder());
-	}
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -50,11 +43,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth
 				.inMemoryAuthentication()
-				.withUser("user").password("$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..").roles("USER");
+				.withUser("user").password("$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..").roles("USER"); // a jelszó passord nem tudom mi a fene folyik itt
+	}
+
+	@Autowired
+
+	protected void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+
+		auth
+				.userDetailsService(userDetailsService)
+				.passwordEncoder(passwordEncoder());
+
 	}
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public CustomBasicAuthenticationEntryPoint getBasicAuthEntryPoint() {
+
+		return new CustomBasicAuthenticationEntryPoint();
+
 	}
 }

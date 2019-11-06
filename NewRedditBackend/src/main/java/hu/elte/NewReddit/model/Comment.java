@@ -1,5 +1,6 @@
 package hu.elte.NewReddit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,13 +29,16 @@ public class Comment implements Serializable {
 	@Column(name = "COMMENT_ID")
 	private Long id;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "POST_ID", nullable = false)
-	private Post post;
+	private RedditPost post;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "COMMENTER_ID", nullable = false)
 	private User user;
+
 	@Column(name = "COMMENT_TEXT", nullable = false)
 	private String text;
 
