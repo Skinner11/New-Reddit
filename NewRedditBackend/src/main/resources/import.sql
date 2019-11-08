@@ -1,6 +1,6 @@
-INSERT INTO REDDIT_USER (USER_ID, username, password, user_role) VALUES (1, 'kill', 'me', 'NORMAL');
-INSERT INTO REDDIT_USER (USER_ID, username, password, user_role) VALUES (2, 'maya', 'hee', 'NORMAL');
-INSERT INTO REDDIT_USER (USER_ID, username, password, user_role) VALUES (3, 'mayaa', 'hoo', 'MODERATOR');
+INSERT INTO REDDIT_USER (USER_ID, username, password, user_role) VALUES (1, 'user1', 'passw1', 'NORMAL');
+INSERT INTO REDDIT_USER (USER_ID, username, password, user_role) VALUES (2, 'user2', 'passw2', 'NORMAL');
+INSERT INTO REDDIT_USER (USER_ID, username, password, user_role) VALUES (3, 'user3', 'passw3', 'MODERATOR');
 INSERT INTO REDDIT_USER (USER_ID, username, password, user_role) VALUES (4, 'asd', 'asd', 'NORMAL');
 
 INSERT INTO REDDIT_POST (POST_ID, BOO, YAAY, POSTER_ID) VALUES (1, 12, 3, 1);
