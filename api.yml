@@ -18,8 +18,6 @@ tags:
   description: "Operations about comments"
 - name: "posts"
   description: "Operations about posts"
-- name: "post contents"
-  description: "Operations about post contents"
 schemes:
 - "https"
 - "http"
@@ -322,7 +320,7 @@ paths:
         200:
           description: "Successfully modified"
           schema:
-              $ref: "#/definitions/RedditPost"
+            $ref: "#/definitions/RedditPost"
     delete:
       tags:
       - "posts"
@@ -388,6 +386,8 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Comment"
+      content:
+        $ref: "#/definitions/PostContent"
     xml:
       name: "RedditPost"
   User:
