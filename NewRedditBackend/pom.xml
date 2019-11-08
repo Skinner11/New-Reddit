@@ -15,7 +15,7 @@
 	<description>This project will try to imitate reddit, following a family-friendly guideline</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
 	</properties>
 
 	<dependencies>

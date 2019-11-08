@@ -29,7 +29,7 @@ public class Comment implements Serializable {
 	@Column(name = "COMMENT_ID")
 	private Long id;
 
-	@JsonIgnore
+        @JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "POST_ID", nullable = false)
 	private RedditPost post;

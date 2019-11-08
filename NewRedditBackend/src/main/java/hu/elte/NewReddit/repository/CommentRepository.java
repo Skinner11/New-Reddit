@@ -17,5 +17,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface CommentRepository extends CrudRepository<Comment, Long> {
 
-	Optional<List<Comment>> findAllByPost_id(Long id);
+	Optional<Iterable<Comment>> findAllByPostId(Long id);
 }

@@ -38,7 +38,6 @@ public class RedditPost implements Serializable {
 	@JoinColumn(name = "POSTER_ID", nullable = false)
 	private User user;
 
-	@JsonIgnore
 	@OneToOne(mappedBy = "post", cascade = CascadeType.ALL,
 			orphanRemoval = true, fetch = FetchType.LAZY)
 	private PostContent content;

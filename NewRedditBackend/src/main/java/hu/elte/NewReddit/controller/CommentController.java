@@ -3,6 +3,7 @@ package hu.elte.NewReddit.controller;
 import hu.elte.NewReddit.model.Comment;
 import hu.elte.NewReddit.repository.CommentRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,19 @@ public class CommentController {
 
 	@Autowired
 	private CommentRepository commentRepository;
-
+        
+        @GetMapping("")
+        public ResponseEntity<Iterable<Comment>> getAll() {
+            return new ResponseEntity(commentRepository.findAll(), HttpStatus.OK);
+        }
+        
 	@GetMapping("/{postId}}")
-	public ResponseEntity<List<Comment>> getCommentsByPostId(@PathVariable Long postId) {
-		return new ResponseEntity(commentRepository.findAllByPost_id(postId), HttpStatus.OK);
+	public ResponseEntity<Iterable<Comment>> getAllCommentsById(@PathVariable Long postId) {
+                Optional<Iterable<Comment>> result = commentRepository.findAllByPostId(postId);
+                if(result.isPresent()) {
+                    return new ResponseEntity(result, HttpStatus.OK);
+                }
+		return new ResponseEntity(null, HttpStatus.NOT_FOUND);
 	}
 
 }

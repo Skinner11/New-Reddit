@@ -1,6 +1,7 @@
 package hu.elte.NewReddit.controller;
 
 import hu.elte.NewReddit.model.RedditPost;
+import hu.elte.NewReddit.repository.PostContentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,9 @@ public class RedditPostController {
 	@Autowired
 	private RedditPostRepository redditPostRepository;
 
+        @Autowired
+        private PostContentRepository postContentRepository;
+        
 	@GetMapping("")
 	public ResponseEntity<Iterable<RedditPost>> getAll() {
 		return new ResponseEntity(redditPostRepository.findAll(), HttpStatus.OK);
@@ -27,7 +31,7 @@ public class RedditPostController {
 	public ResponseEntity<RedditPost> getById(@PathVariable Long id) {
 		Optional<RedditPost> item = redditPostRepository.findById(id);
 		if (!item.isPresent()) {
-			return new ResponseEntity(item, HttpStatus.OK);
+                    return new ResponseEntity(item, HttpStatus.OK);
 		}
 		return new ResponseEntity(item, HttpStatus.NOT_FOUND);
 	}
