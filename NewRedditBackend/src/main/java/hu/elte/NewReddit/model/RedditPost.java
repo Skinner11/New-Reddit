@@ -2,7 +2,8 @@ package hu.elte.NewReddit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,15 +14,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "REDDIT_POST")
+@Table(name = "reddit_post")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,26 +32,37 @@ public class RedditPost implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "POST_ID")
+	@Column(name = "post_id")
 	private Long id;
+
+	@Column(name = "title", nullable = false)
+	private String title;
+
+	@Column(name = "content", nullable = false)
+	private String content;
+
+	@Column(name = "pic", nullable = true)
+	private String pic;
+
+	@Column(name = "votes", nullable = false)
+	private Integer votes;
+
+	@Column(name = "created_at", nullable = false)
+	@Temporal(TemporalType.DATE)
+	private Date createdAt;
+
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "parent_id", nullable = false)
+	private Subreddit subreddit;
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "POSTER_ID", nullable = false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
-
-	@OneToOne(mappedBy = "post", cascade = CascadeType.ALL,
-			orphanRemoval = true, fetch = FetchType.LAZY)
-	private PostContent content;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL,
 			orphanRemoval = true, fetch = FetchType.LAZY)
-	private List<Comment> comments;
-
-	@Column(name = "BOO")
-	private Long boo;
-
-	@Column(name = "YAAY")
-	private Long yaay;
+	private Set<Comment> comments;
 }

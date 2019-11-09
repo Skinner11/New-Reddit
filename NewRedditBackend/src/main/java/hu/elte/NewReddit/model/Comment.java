@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "COMMENT")
+@Table(name = "comment")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,20 +26,23 @@ public class Comment implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "COMMENT_ID")
+	@Column(name = "comment_id")
 	private Long id;
 
-        @JsonIgnore
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "POST_ID", nullable = false)
+	@JoinColumn(name = "post_id", nullable = false)
 	private RedditPost post;
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "COMMENTER_ID", nullable = false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column(name = "COMMENT_TEXT", nullable = false)
+	@Column(name = "text", nullable = false)
 	private String text;
+
+	@Column(name = "votes", nullable = false)
+	private Integer votes;
 
 }
