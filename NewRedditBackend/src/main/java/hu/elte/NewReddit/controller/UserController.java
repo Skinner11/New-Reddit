@@ -32,12 +32,26 @@ public class UserController {
 
 	@GetMapping("")
 	public ResponseEntity<Iterable<User>> getAll() {
-		return new ResponseEntity(userRepository.findAll(), HttpStatus.OK);
+		Iterable<User> result = userRepository.findAll();
+		result.forEach((User item) -> {
+			item.setPassword(null);
+		});
+		return new ResponseEntity(result, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getById(@PathVariable Long id) {
-		return new ResponseEntity(userRepository.findById(id), HttpStatus.OK);
+		Optional<User> result = userRepository.findById(id);
+		if (result.isPresent()) {
+			result.get().setPassword(null);
+			return new ResponseEntity(result, HttpStatus.OK);
+		}
+		return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity login(@RequestBody User user) {
+		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("/logoff")
@@ -55,11 +69,6 @@ public class UserController {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setUserRole(UserRole.NORMAL);
 		return ResponseEntity.ok(userRepository.save(user));
-	}
-
-	@PostMapping("/login")
-	public ResponseEntity login(@RequestBody User user) {
-		return ResponseEntity.ok().build();
 	}
 
 }

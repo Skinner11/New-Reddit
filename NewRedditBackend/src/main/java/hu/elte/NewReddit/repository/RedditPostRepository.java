@@ -6,7 +6,7 @@
 package hu.elte.NewReddit.repository;
 
 import hu.elte.NewReddit.model.RedditPost;
-import hu.elte.NewReddit.model.User;
+import hu.elte.NewReddit.model.Subreddit;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -15,4 +15,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface RedditPostRepository extends CrudRepository<RedditPost, Long> {
 
+	Iterable<RedditPost> findAllBySubreddit(Subreddit subreddit);
 }

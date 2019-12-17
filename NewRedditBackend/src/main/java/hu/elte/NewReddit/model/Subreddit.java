@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-class Subreddit implements Serializable {
+public class Subreddit implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
