@@ -1,5 +1,6 @@
 package hu.elte.NewReddit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
@@ -34,6 +35,7 @@ public class Subreddit implements Serializable {
 
 	@Column
 	@ManyToMany
+	@JsonIgnore
 	@JoinTable(
 			joinColumns = @JoinColumn(name = "subreddit_id"),
 			inverseJoinColumns = @JoinColumn(name = "user_id"))
@@ -41,6 +43,7 @@ public class Subreddit implements Serializable {
 
 	@Column
 	@ManyToMany
+	@JsonIgnore
 	@JoinTable(
 			joinColumns = @JoinColumn(name = "subreddit_id"),
 			inverseJoinColumns = @JoinColumn(name = "user_id"))

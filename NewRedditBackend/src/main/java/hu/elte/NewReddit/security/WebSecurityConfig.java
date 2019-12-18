@@ -18,6 +18,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
+	private CustomAuthenticationProvider authProvider;
+
+	@Autowired
+	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+		auth.authenticationProvider(authProvider);
+	}
+
+	@Autowired
+	protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication()
+				.withUser("admin")
+				.password(passwordEncoder().encode("admin"))
+				.roles("MODERATOR"); // a jelszó passord nem tudom mi a fene folyik itt
+	}
+
+	@Autowired
 	private UserDetailsService userDetailsService;
 
 	@Override
@@ -39,32 +55,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 
-	@Autowired
-	protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth
-				.inMemoryAuthentication()
-				.withUser("user").password("$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..").roles("USER"); // a jelszó passord nem tudom mi a fene folyik itt
-	}
-
-	@Autowired
-
-	protected void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-
-		auth
-				.userDetailsService(userDetailsService)
-				.passwordEncoder(passwordEncoder());
-
-	}
-
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean
-	public CustomBasicAuthenticationEntryPoint getBasicAuthEntryPoint() {
-
-		return new CustomBasicAuthenticationEntryPoint();
-
-	}
 }

@@ -36,13 +36,13 @@ public class Comment implements Serializable {
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "user_id", nullable = true)
 	private User user;
 
-	@Column(name = "text", nullable = false)
+	@Column(name = "text", nullable = true)
 	private String text;
 
-	@Column(name = "votes", nullable = false)
+	@Column(name = "votes", nullable = true)
 	private Integer votes;
 
 }

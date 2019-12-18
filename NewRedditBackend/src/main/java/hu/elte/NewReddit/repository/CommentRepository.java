@@ -6,6 +6,7 @@
 package hu.elte.NewReddit.repository;
 
 import hu.elte.NewReddit.model.Comment;
+import hu.elte.NewReddit.model.RedditPost;
 import hu.elte.NewReddit.model.User;
 import java.util.List;
 import java.util.Optional;
@@ -17,5 +18,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface CommentRepository extends CrudRepository<Comment, Long> {
 
-	Optional<Iterable<Comment>> findAllByPostId(Long id);
+	Iterable<Comment> findAllByPost(RedditPost redditPost);
 }
