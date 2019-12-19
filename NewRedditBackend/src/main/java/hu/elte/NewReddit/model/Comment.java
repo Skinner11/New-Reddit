@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class Comment implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "comment_id")
 	private Long id;
 
@@ -44,5 +44,13 @@ public class Comment implements Serializable {
 
 	@Column(name = "votes", nullable = true)
 	private Integer votes;
+
+	public Comment(Comment other) {
+		this.id = other.id;
+		this.post = other.post;
+		this.user = other.user;
+		this.text = other.text;
+		this.votes = other.votes;
+	}
 
 }

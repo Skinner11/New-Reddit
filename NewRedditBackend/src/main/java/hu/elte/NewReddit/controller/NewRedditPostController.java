@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,27 +71,36 @@ public class NewRedditPostController {
 	}
 
 	@PostMapping(value = "/{id}/comments")
-	public ResponseEntity<User> saveCommentToPost(@PathVariable Long id, @RequestBody Comment comment) {
+	public ResponseEntity saveCommentToPost(@PathVariable Long id, @RequestBody Comment reqComment) {
 		Optional<RedditPost> post = redditPostRepository.findById(id);
-		Comment _comment = new Comment();
 		if (post.isPresent() && authenticatedUser != null) {
-			_comment.setPost(post.get());
-			_comment.setUser(authenticatedUser.getUser());
-			// comment.setPost(post.get());
-			// comment.setUser(authenticatedUser);
-			return new ResponseEntity(authenticatedUser.getUser(), HttpStatus.OK);
+			Comment comment = new Comment();
+			comment.setPost(post.get());
+			comment.setUser(authenticatedUser.getUser());
+			comment.setText(reqComment.getText());
+			commentRepository.save(comment);
+			return new ResponseEntity(HttpStatus.OK);
 		}
-		return new ResponseEntity(authenticatedUser.getUser(), HttpStatus.NOT_FOUND);
-		// commentRepository.save(comment);
-		// return ResponseEntity.ok().build();
+		return new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
 
-	@GetMapping(value = "/subreddit/{subbredditId}")
+	@GetMapping(value = "/subreddits/{subbredditId}")
 	public ResponseEntity<Iterable<RedditPost>> getPostsBySubbreddit(@PathVariable Long subbredditId) {
 		Optional<Subreddit> subred = subredditRepository.findById(subbredditId);
 		if (subred.isPresent()) {
 			return new ResponseEntity(redditPostRepository.findAllBySubreddit(subred.get()), HttpStatus.OK);
 		}
-		return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+		return new ResponseEntity(HttpStatus.NOT_FOUND);
+	}
+
+	@DeleteMapping("/{postId}")
+	public ResponseEntity deltePostById(@PathVariable Long postId) {
+		Optional<RedditPost> post = redditPostRepository.findById(postId);
+
+		if (post.isPresent()) {
+			redditPostRepository.delete(post.get());
+			return new ResponseEntity(HttpStatus.OK);
+		}
+		return new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
 }

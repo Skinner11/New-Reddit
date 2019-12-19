@@ -1,10 +1,11 @@
 package hu.elte.NewReddit.controller;
 
-import hu.elte.NewReddit.model.RedditPost;
 import hu.elte.NewReddit.model.User;
 import hu.elte.NewReddit.model.enums.UserRole;
 import hu.elte.NewReddit.repository.UserRepository;
 import hu.elte.NewReddit.security.AuthenticatedUser;
+import hu.elte.NewReddit.model.ApiResponse;
+import java.util.Date;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,39 +53,57 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<User> login(@RequestBody User user) {
-		Optional<User> _user = userRepository.findByUsername(user.getUsername());
-		if (_user.isPresent()) {
-			authenticatedUser.setUser(_user.get());
-			// return new ResponseEntity(authenticatedUser.getUser(), HttpStatus.OK);
-			return ResponseEntity.ok().build();
+	public ResponseEntity<ApiResponse> login(@RequestBody User reqUser) {
+		Optional<User> user = userRepository.findByUsername(reqUser.getUsername());
+
+		String date = new Date(System.currentTimeMillis()).toString();
+
+		if (authenticatedUser.getUser() != null) {
+			return new ResponseEntity<>(new ApiResponse(418, "User already loged in", date), HttpStatus.I_AM_A_TEAPOT);
 		}
-		return new ResponseEntity(HttpStatus.NOT_FOUND);
+		if (user.isPresent()) {
+			authenticatedUser.setUser(user.get());
+			return new ResponseEntity(new ApiResponse(200, "Successfully logged in", date), HttpStatus.OK);
+		}
+		return new ResponseEntity(new ApiResponse(404, "Something went wrong", date), HttpStatus.NOT_FOUND);
 	}
 
 	@GetMapping("/logoff")
-	public ResponseEntity logoff() {
-		authenticatedUser = null;
-		return ResponseEntity.ok(0);
+	public ResponseEntity<ApiResponse> logoff() {
+
+		String date = new Date(System.currentTimeMillis()).toString();
+
+		if (authenticatedUser.getUser() == null) {
+			return new ResponseEntity(new ApiResponse(418, "No logged in user", date), HttpStatus.I_AM_A_TEAPOT);
+		}
+
+		authenticatedUser.setUser(null);
+		return new ResponseEntity(new ApiResponse(200, "Successfully logged out", date), HttpStatus.OK);
 	}
 
 	@GetMapping("/me")
-	public ResponseEntity<User> getLoggedInUser() {
+	public ResponseEntity<ApiResponse> getLoggedInUser() {
+		String date = new Date(System.currentTimeMillis()).toString();
+
 		if (authenticatedUser.getUser() == null) {
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
+			return new ResponseEntity(new ApiResponse(404, "No logged in user", date), HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity(authenticatedUser.getUser(), HttpStatus.OK);
+		return new ResponseEntity(new ApiResponse(200, "It's a me " + authenticatedUser.getUser().getUsername(), date), HttpStatus.OK);
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<User> register(@RequestBody User user) {
+	public ResponseEntity<ApiResponse> register(@RequestBody User user) {
+
+		String date = new Date(System.currentTimeMillis()).toString();
+
 		Optional<User> oUser = userRepository.findByUsername(user.getUsername());
 		if (oUser.isPresent()) {
-			return ResponseEntity.badRequest().build();
+			return new ResponseEntity(new ApiResponse(418, "Username is taken", date), HttpStatus.I_AM_A_TEAPOT);
 		}
+
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setUserRole(UserRole.NORMAL);
-		return ResponseEntity.ok(userRepository.save(user));
+		return new ResponseEntity(new ApiResponse(200, "Successfuly registered", date), HttpStatus.OK);
 	}
 
 }

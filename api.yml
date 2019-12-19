@@ -18,10 +18,30 @@ tags:
   description: "Operations about comments"
 - name: "posts"
   description: "Operations about posts"
+- name: "subreddits"
+  description: "Operations about subreddits"
 schemes:
 - "https"
 - "http"
 paths:
+  /users/me:
+    get:
+      tags:
+      - "users"
+      summary: "Get current user"
+      operationId: "getCurrentUser"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "there is a loged in user"
+          schema:
+           $ref: "#/definitions/ApiResponse"
+        404:
+          description: "tehre is no loged in user"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        
   /users:
     get:
       tags:
@@ -96,7 +116,7 @@ paths:
           schema:
             $ref: "#/definitions/ApiResponse"
   /users/logoff:
-    patch:
+    post:
       tags:
       - "users"
       summary: "Log off authenticated user"
@@ -109,20 +129,21 @@ paths:
           schema:
             $ref: "#/definitions/ApiResponse"
             
-  /comments/{postId}:
+  /comments/{id}:
     get:
       tags:
       - "comments"
-      summary: "List comment to a post"
+      summary: "Get comment by id"
       operationId: "commentsByPostId"
       produces:
       - "application/json"
       parameters:
-      - name: "postId"
+      - name: "id"
         in: "path"
         required: true
         type: "integer"
         format: "int64"
+        description: "comment id"
       responses:
         200:
           description: "successful operation"
@@ -130,39 +151,75 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Comment"
-    post:
+    delete:
       tags:
       - "comments"
-      summary: "Add a  comment to a post"
-      operationId: "postComment"
-      produces:
-      - "application/json"
+      summary: "Delete comment"
+      operationId: "deleteComment"
       parameters:
-      - name: "postId"
+      - name: "id"
         in: "path"
         required: true
         type: "integer"
         format: "int64"
-      - name: "body"
-        required: true
+        description: "comment id"
+      - name: "userId"
         in: "body"
+        required: true
         schema:
           type: "object"
           properties:
             userId:
               type: "integer"
               format: "int64"
-            text:
-              type: "string"
       responses:
         200:
-          description: "successful operation"
+          description: "Successfully deleted"
+          schema:
+              $ref: "#/definitions/Comment"
+        404:
+          description: "comment not found"
           schema:
               $ref: "#/definitions/ApiResponse"
-        404:
-          description:  "reddit post not found"
+        409:
+          description: "comment is not users"
           schema:
-            $ref: "#/definitions/ApiResponse"
+              $ref: "#/definitions/ApiResponse"
+    patch:
+      tags:
+      - "comments"
+      summary: "Modify comment"
+      operationId: "modifyComment"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+        description: "comment id"
+      - name: "userId"
+        in: "body"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            userId:
+              type: "integer"
+              format: "int64"
+      responses:
+        200:
+          description: "Successfully modified"
+          schema:
+              $ref: "#/definitions/Comment"
+        404:
+          description: "comment not found"
+          schema:
+              $ref: "#/definitions/ApiResponse"
+        409:
+          description: "comment is not users"
+          schema:
+              $ref: "#/definitions/ApiResponse"
+    
   /comments/user/{userId}:
     get:
       tags:
@@ -186,74 +243,7 @@ paths:
           description:  "user not found"
           schema:
             $ref: "#/definitions/ApiResponse"
-  /comments/remove/{commentId}:
-    delete:
-      tags:
-      - "comments"
-      summary: "Delete comment"
-      operationId: "deleteComment"
-      parameters:
-      - name: "commentId"
-        in: "path"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "userId"
-        in: "body"
-        required: true
-        schema:
-          type: "object"
-          properties:
-            userId:
-              type: "integer"
-              format: "int64"
-      responses:
-        200:
-          description: "Successfully deleted"
-          schema:
-              $ref: "#/definitions/Comment"
-        404:
-          description: "comment not found"
-          schema:
-              $ref: "#/definitions/ApiResponse"
-        409:
-          description: "comment is not users"
-          schema:
-              $ref: "#/definitions/ApiResponse"
-  /comments/modify/{commentId}:
-    patch:
-      tags:
-      - "comments"
-      summary: "Modify comment"
-      operationId: "modifyComment"
-      parameters:
-      - name: "commentId"
-        in: "path"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "userId"
-        in: "body"
-        required: true
-        schema:
-          type: "object"
-          properties:
-            userId:
-              type: "integer"
-              format: "int64"
-      responses:
-        200:
-          description: "Successfully modified"
-          schema:
-              $ref: "#/definitions/Comment"
-        404:
-          description: "comment not found"
-          schema:
-              $ref: "#/definitions/ApiResponse"
-        409:
-          description: "comment is not users"
-          schema:
-              $ref: "#/definitions/ApiResponse"
+
   /posts:
     get:
       tags:
@@ -350,6 +340,124 @@ paths:
           description: "post is not users"
           schema:
               $ref: "#/definitions/ApiResponse"
+  /posts/{postId}/comments:
+    get:
+      tags:
+      - "posts"
+      summary: "Gets comments to givent post"
+      parameters:
+      - name: "postId"
+        in: "path"
+        type: "integer"
+        format: "int64"
+        required: true
+      responses:
+        200:
+          description: "Post exists"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Comment"    
+              
+        404:
+          description: "post not found"
+          
+          schema:
+              $ref: "#/definitions/ApiResponse"
+    post:
+      tags:
+      - "posts"
+      summary: "Add comment to post"
+      parameters:
+      - name: "postId"
+        in: "path"
+        type: "integer"
+        format: "int64"
+        required: true
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            text:
+              type: "string"
+      responses:
+        200:
+          description: "Successfully commented"
+          schema:
+              $ref: "#/definitions/Comment"
+        404:
+          description: "post not found"
+          schema:
+              $ref: "#/definitions/ApiResponse"
+  /subreddits:
+    get:
+      tags:
+      - "subreddits"
+      summary: "Lists all subreddits"
+      responses:
+        200:
+          description: "Server is online"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Subreddit"
+        500:
+          description: "Server is not online"
+    post:
+      tags:
+      - "subreddits"
+      summary: "Create new subreddit"
+      responses:
+        200:
+          description: "Successfull operation"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        418:
+          description: "Subreddit with this name already exists"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /posts/subreddits/{subredditId}:
+    get:
+      tags:
+      - "posts"
+      summary: "Get posts that belong to a subreddit"
+      parameters:
+      - name: "subredditId"
+        in: "path"
+        type: "integer"
+        format: "int64"
+        required: true
+      responses:
+        200:
+          description: "Successfull operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/RedditPost"
+        404:
+          description: "Subreddit not found"
+          schema:
+            type: "object"
+  /subreddits/{subredditId}:
+    delete:
+      tags:
+      - "subreddits"
+      summary: "Removes existing subreddit"
+      parameters:
+      - name: "subredditId"
+        in: "path"
+        type: "integer"
+        format: "int64"
+        required: true
+      responses:
+        200:
+          description: "Successfull operation"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    
+    
 securityDefinitions:
   newreddit_auth:
     type: "basic"
@@ -370,26 +478,6 @@ definitions:
         type: "string"
     xml:
       name: "Comment"
-  RedditPost:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      userId:
-        type: "integer"
-        format: "int64"
-      contentId:
-        type: "integer"
-        format: "int64"
-      comments:
-        type: "array"
-        items:
-          $ref: "#/definitions/Comment"
-      content:
-        $ref: "#/definitions/PostContent"
-    xml:
-      name: "RedditPost"
   User:
     type: "object"
     properties:
@@ -406,17 +494,11 @@ definitions:
           - "GUEST"
           - "NORMAL"
           - "MOERATOR"
-      comments:
-        type: "array"
-        items:
-          $ref: "#/definitions/Comment"
-      posts:
-        type: "array"
-        items:
-          $ref: "#/definitions/RedditPost"
+      registrationDate:
+        type: "string"
     xml:
       name: "User"
-  PostContent:
+  RedditPost:
     type: "object"
     properties:
       id:
@@ -433,7 +515,17 @@ definitions:
         type: "string"
         format: "url"
     xml:
-      name: "PostContent"
+      name: "RedditPost"
+  Subreddit:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Subreddit"
   ApiResponse:
     type: "object"
     properties:

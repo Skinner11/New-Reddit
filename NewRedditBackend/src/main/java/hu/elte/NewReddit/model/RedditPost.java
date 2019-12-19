@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 public class RedditPost implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "post_id")
 	private Long id;
 

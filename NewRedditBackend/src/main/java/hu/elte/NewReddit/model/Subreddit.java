@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class Subreddit implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "subreddit_id")
 	private Long id;
 

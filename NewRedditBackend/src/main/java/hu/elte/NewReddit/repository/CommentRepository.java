@@ -19,4 +19,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface CommentRepository extends CrudRepository<Comment, Long> {
 
 	Iterable<Comment> findAllByPost(RedditPost redditPost);
+
+	Iterable<Comment> findAllByUser(User user);
 }

@@ -1,6 +1,7 @@
 package hu.elte.NewReddit.repository;
 
 import hu.elte.NewReddit.model.Subreddit;
+import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 
 /*
@@ -14,4 +15,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface SubredditRepository extends CrudRepository<Subreddit, Long> {
 
+	Optional<Subreddit> findByName(String name);
 }
