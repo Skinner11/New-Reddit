@@ -30,12 +30,12 @@ public class Comment implements Serializable {
 	private Long id;
 
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "post_id", nullable = false)
 	private RedditPost post;
 
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = true)
 	private User user;
 

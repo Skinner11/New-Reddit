@@ -1,10 +1,12 @@
 package hu.elte.NewReddit.controller;
 
+import hu.elte.NewReddit.model.ApiResponse;
 import hu.elte.NewReddit.model.Comment;
 import hu.elte.NewReddit.model.User;
 import hu.elte.NewReddit.repository.CommentRepository;
 import hu.elte.NewReddit.repository.RedditPostRepository;
 import hu.elte.NewReddit.repository.UserRepository;
+import java.util.Date;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,26 +60,30 @@ public class CommentController {
 	}
 
 	@DeleteMapping("/{commentId}")
-	public ResponseEntity deleteComment(@PathVariable Long commentId) {
+	public ResponseEntity<ApiResponse> deleteComment(@PathVariable Long commentId) {
+
+		String date = new Date(System.currentTimeMillis()).toString();
+
 		Optional<Comment> comment = commentRepository.findById(commentId);
+
 		if (comment.isPresent()) {
 			commentRepository.delete(comment.get());
 		}
 
-		return new ResponseEntity(HttpStatus.OK);
+		return new ResponseEntity(new ApiResponse(200, "Successfully deleted", date), HttpStatus.OK);
 	}
 
 	@PatchMapping("/{commentId}")
-	public ResponseEntity modifyComment(@PathVariable Long commentId, @RequestBody Comment reqComment) {
+	public ResponseEntity<ApiResponse> modifyComment(@PathVariable Long commentId, @RequestBody Comment reqComment) {
+		String date = new Date(System.currentTimeMillis()).toString();
+
 		Optional<Comment> comment = commentRepository.findById(commentId);
 
 		if (comment.isPresent()) {
-			Comment newComment = new Comment(comment.get());
-			commentRepository.delete(comment.get());
-			newComment.setText(reqComment.getText());
-			commentRepository.save(newComment);
-			return new ResponseEntity(HttpStatus.OK);
+			comment.get().setText(reqComment.getText());
+			commentRepository.save(comment.get());
+			return new ResponseEntity(new ApiResponse(200, "Comment successfully modified", date), HttpStatus.OK);
 		}
-		return new ResponseEntity(HttpStatus.NOT_FOUND);
+		return new ResponseEntity(new ApiResponse(404, "Comment not found", date), HttpStatus.NOT_FOUND);
 	}
 }

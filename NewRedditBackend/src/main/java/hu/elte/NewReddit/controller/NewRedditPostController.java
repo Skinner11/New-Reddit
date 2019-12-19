@@ -5,6 +5,7 @@
  */
 package hu.elte.NewReddit.controller;
 
+import hu.elte.NewReddit.model.ApiResponse;
 import hu.elte.NewReddit.model.Comment;
 import hu.elte.NewReddit.model.RedditPost;
 import hu.elte.NewReddit.model.Subreddit;
@@ -13,6 +14,7 @@ import hu.elte.NewReddit.repository.CommentRepository;
 import hu.elte.NewReddit.repository.RedditPostRepository;
 import hu.elte.NewReddit.repository.SubredditRepository;
 import hu.elte.NewReddit.security.AuthenticatedUser;
+import java.util.Date;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,6 +80,7 @@ public class NewRedditPostController {
 			comment.setPost(post.get());
 			comment.setUser(authenticatedUser.getUser());
 			comment.setText(reqComment.getText());
+			comment.setVotes(1);
 			commentRepository.save(comment);
 			return new ResponseEntity(HttpStatus.OK);
 		}
@@ -94,13 +97,16 @@ public class NewRedditPostController {
 	}
 
 	@DeleteMapping("/{postId}")
-	public ResponseEntity deltePostById(@PathVariable Long postId) {
+	public ResponseEntity<ApiResponse> deltePostById(@PathVariable Long postId) {
+
+		String date = new Date(System.currentTimeMillis()).toString();
+
 		Optional<RedditPost> post = redditPostRepository.findById(postId);
 
 		if (post.isPresent()) {
 			redditPostRepository.delete(post.get());
-			return new ResponseEntity(HttpStatus.OK);
+			return new ResponseEntity(new ApiResponse(200, "Post successfully deleted", date), HttpStatus.OK);
 		}
-		return new ResponseEntity(HttpStatus.NOT_FOUND);
+		return new ResponseEntity(new ApiResponse(200, "Post not found", date), HttpStatus.NOT_FOUND);
 	}
 }

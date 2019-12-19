@@ -116,7 +116,7 @@ paths:
           schema:
             $ref: "#/definitions/ApiResponse"
   /users/logoff:
-    post:
+    get:
       tags:
       - "users"
       summary: "Log off authenticated user"
@@ -128,7 +128,37 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/ApiResponse"
-            
+  /users/login:
+    post:
+      tags:
+      - "users"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Send the username and password in the body, encripted"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            username:
+              type: "string"
+            password:
+              type: "string"
+      responses:
+        200:
+          description: "Successfull operation"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        418:
+          description: "User already logged in"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        404:
+          description: "User not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
   /comments/{id}:
     get:
       tags:
@@ -156,6 +186,8 @@ paths:
       - "comments"
       summary: "Delete comment"
       operationId: "deleteComment"
+      produces:
+      - "application/json"
       parameters:
       - name: "id"
         in: "path"
@@ -190,6 +222,8 @@ paths:
       - "comments"
       summary: "Modify comment"
       operationId: "modifyComment"
+      produces:
+      - "application/json"
       parameters:
       - name: "id"
         in: "path"
@@ -226,6 +260,8 @@ paths:
       - "comments"
       summary: "Get all comments of user"
       operationId: "getUserComments"
+      produces:
+      - "application/json"
       parameters:
       - name: "userId"
         in: "path"
@@ -250,6 +286,8 @@ paths:
       - "posts"
       summary: "List all posts"
       operationId: "listPosts"
+      produces:
+      - "application/json"
       responses:
         200:
           description: "Successfully modified"
@@ -268,6 +306,8 @@ paths:
       - "posts"
       summary: "Post new The New Reddit post (see what I did there?)"
       operationId: "postNewRedditPost"
+      produces:
+      - "application/json"
       parameters:
       - name: "body"
         in: "body"
@@ -299,6 +339,8 @@ paths:
       tags:
       - "posts"
       summary: "Get post by id"
+      produces:
+      - "application/json"
       parameters:
       - name: "postId"
         in: "path"
@@ -316,6 +358,8 @@ paths:
       - "posts"
       summary: "Get post by id"
       operationId: "deletePostById"
+      produces:
+      - "application/json"
       parameters:
       - name: "postId"
         in: "path"
@@ -345,6 +389,8 @@ paths:
       tags:
       - "posts"
       summary: "Gets comments to givent post"
+      produces:
+      - "application/json"
       parameters:
       - name: "postId"
         in: "path"
@@ -368,6 +414,8 @@ paths:
       tags:
       - "posts"
       summary: "Add comment to post"
+      produces:
+      - "application/json"
       parameters:
       - name: "postId"
         in: "path"
@@ -396,6 +444,8 @@ paths:
       tags:
       - "subreddits"
       summary: "Lists all subreddits"
+      produces:
+      - "application/json"
       responses:
         200:
           description: "Server is online"
@@ -409,6 +459,8 @@ paths:
       tags:
       - "subreddits"
       summary: "Create new subreddit"
+      produces:
+      - "application/json"
       responses:
         200:
           description: "Successfull operation"
@@ -423,6 +475,8 @@ paths:
       tags:
       - "posts"
       summary: "Get posts that belong to a subreddit"
+      produces:
+      - "application/json"
       parameters:
       - name: "subredditId"
         in: "path"
@@ -445,6 +499,8 @@ paths:
       tags:
       - "subreddits"
       summary: "Removes existing subreddit"
+      produces:
+      - "application/json"
       parameters:
       - name: "subredditId"
         in: "path"

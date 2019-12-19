@@ -52,12 +52,12 @@ public class RedditPost implements Serializable {
 	private Date createdAt;
 
 	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "parent_id", nullable = false)
 	private Subreddit subreddit;
 
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 

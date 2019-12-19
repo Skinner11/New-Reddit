@@ -74,7 +74,7 @@ public class UserController {
 		String date = new Date(System.currentTimeMillis()).toString();
 
 		if (authenticatedUser.getUser() == null) {
-			return new ResponseEntity(new ApiResponse(418, "No logged in user", date), HttpStatus.I_AM_A_TEAPOT);
+			return new ResponseEntity(new ApiResponse(418, "User not logged in", date), HttpStatus.I_AM_A_TEAPOT);
 		}
 
 		authenticatedUser.setUser(null);
@@ -103,6 +103,9 @@ public class UserController {
 
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setUserRole(UserRole.NORMAL);
+		user.setRegistrationDate(new Date());
+		// return new ResponseEntity<>(user, HttpStatus.OK);
+		userRepository.save(user);
 		return new ResponseEntity(new ApiResponse(200, "Successfuly registered", date), HttpStatus.OK);
 	}
 
