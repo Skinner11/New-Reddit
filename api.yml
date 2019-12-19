@@ -560,16 +560,19 @@ definitions:
       id:
         type: "integer"
         format: "int64"
-      postId:
-        type: "integer"
-        format: "int64"
       title:
         type: "string"
-      textContent:
+      content:
         type: "string"
-      imageUrl:
+      pic:
         type: "string"
         format: "url"
+      votes:
+        type: "integer"
+        format: "int64"
+      createdAt:
+        type: "string"
+        format: "date"
     xml:
       name: "RedditPost"
   Subreddit:
