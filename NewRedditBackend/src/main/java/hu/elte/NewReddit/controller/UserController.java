@@ -66,7 +66,7 @@ public class UserController {
 	}
 
 	@GetMapping("/logoff")
-	public ResponseEntity<ApiResponse> logoff() {
+	public ResponseEntity<ApiResponse> logoff(Principal principal) {
 
 		String date = new Date(System.currentTimeMillis()).toString();
 

@@ -40,11 +40,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+				.logout()
+				.logoutUrl("/users/logoff")
+				.and()
 				.cors()
 				.and()
 				.csrf().disable()
 				.authorizeRequests()
-				.antMatchers("/h2/**", "/users/register").permitAll() // important!
+				.antMatchers("/h2/**", "/users/register", "/images/**").permitAll() // important!
 				.anyRequest().authenticated()
 				.and()
 				.httpBasic()

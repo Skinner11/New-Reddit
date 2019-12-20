@@ -38,7 +38,7 @@ public class RedditPost implements Serializable {
 	@Column(name = "title", nullable = false)
 	private String title;
 
-	@Column(name = "content", nullable = false)
+	@Column(name = "content", nullable = true)
 	private String content;
 
 	@Column(name = "pic", nullable = true)
