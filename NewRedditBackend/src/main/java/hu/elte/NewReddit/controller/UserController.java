@@ -5,6 +5,7 @@ import hu.elte.NewReddit.model.enums.UserRole;
 import hu.elte.NewReddit.repository.UserRepository;
 import hu.elte.NewReddit.security.AuthenticatedUser;
 import hu.elte.NewReddit.model.ApiResponse;
+import java.security.Principal;
 import java.util.Date;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,16 +54,12 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<ApiResponse> login(@RequestBody User reqUser) {
-		Optional<User> user = userRepository.findByUsername(reqUser.getUsername());
+	public ResponseEntity<ApiResponse> login(Principal principal) {
+		Optional<User> user = userRepository.findByUsername(principal.getName());
 
 		String date = new Date(System.currentTimeMillis()).toString();
 
-		if (authenticatedUser.getUser() != null) {
-			return new ResponseEntity<>(new ApiResponse(418, "User already loged in", date), HttpStatus.I_AM_A_TEAPOT);
-		}
 		if (user.isPresent()) {
-			authenticatedUser.setUser(user.get());
 			return new ResponseEntity(new ApiResponse(200, "Successfully logged in", date), HttpStatus.OK);
 		}
 		return new ResponseEntity(new ApiResponse(404, "Something went wrong", date), HttpStatus.NOT_FOUND);
@@ -82,13 +79,14 @@ public class UserController {
 	}
 
 	@GetMapping("/me")
-	public ResponseEntity<ApiResponse> getLoggedInUser() {
+	public ResponseEntity<ApiResponse> getLoggedInUser(Principal principal) {
 		String date = new Date(System.currentTimeMillis()).toString();
 
-		if (authenticatedUser.getUser() == null) {
+		if (principal == null) {
 			return new ResponseEntity(new ApiResponse(404, "No logged in user", date), HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity(new ApiResponse(200, "It's a me " + authenticatedUser.getUser().getUsername(), date), HttpStatus.OK);
+
+		return new ResponseEntity(new ApiResponse(200, "It's a me " + principal.getName(), date), HttpStatus.OK);
 	}
 
 	@PostMapping("/register")
@@ -104,7 +102,6 @@ public class UserController {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setUserRole(UserRole.NORMAL);
 		user.setRegistrationDate(new Date());
-		// return new ResponseEntity<>(user, HttpStatus.OK);
 		userRepository.save(user);
 		return new ResponseEntity(new ApiResponse(200, "Successfuly registered", date), HttpStatus.OK);
 	}

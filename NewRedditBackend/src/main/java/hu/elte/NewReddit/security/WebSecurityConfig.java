@@ -21,21 +21,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private CustomAuthenticationProvider authProvider;
 
 	@Autowired
+	private UserDetailsService userDetailsService;
+
+	@Autowired
 	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(authProvider);
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
+	/*
 	@Autowired
 	protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication()
 				.withUser("admin")
 				.password(passwordEncoder().encode("admin"))
-				.roles("MODERATOR"); // a jelszó passord nem tudom mi a fene folyik itt
+				.roles("MODERATOR");
 	}
-
-	@Autowired
-	private UserDetailsService userDetailsService;
-
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -47,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated()
 				.and()
 				.httpBasic()
+				.authenticationEntryPoint(getBasicAuthEntryPoint())
 				.and()
 				.headers() // important!
 				.frameOptions().disable()
@@ -58,6 +60,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public CustomBasicAuthenticationEntryPoint getBasicAuthEntryPoint() {
+		return new CustomBasicAuthenticationEntryPoint();
 	}
 
 }

@@ -25,6 +25,9 @@ public class UserDetailsServicelmpl implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private AuthenticatedUser authenticatedUser;
+
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -33,6 +36,7 @@ public class UserDetailsServicelmpl implements UserDetailsService {
 			throw new UsernameNotFoundException(username);
 		}
 		User user = oUser.get();
+		authenticatedUser.setUser(user);
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 		grantedAuthorities.add(new SimpleGrantedAuthority(user.getUserRole().toString()));
 

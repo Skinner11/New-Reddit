@@ -13,7 +13,9 @@ import hu.elte.NewReddit.model.User;
 import hu.elte.NewReddit.repository.CommentRepository;
 import hu.elte.NewReddit.repository.RedditPostRepository;
 import hu.elte.NewReddit.repository.SubredditRepository;
+import hu.elte.NewReddit.repository.UserRepository;
 import hu.elte.NewReddit.security.AuthenticatedUser;
+import java.security.Principal;
 import java.util.Date;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,9 @@ public class NewRedditPostController {
 	@Autowired
 	private AuthenticatedUser authenticatedUser;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@GetMapping("")
 	public ResponseEntity<Iterable<RedditPost>> getAllPosts() {
 		return new ResponseEntity(redditPostRepository.findAll(), HttpStatus.OK);
@@ -73,12 +78,13 @@ public class NewRedditPostController {
 	}
 
 	@PostMapping(value = "/{id}/comments")
-	public ResponseEntity saveCommentToPost(@PathVariable Long id, @RequestBody Comment reqComment) {
+	public ResponseEntity saveCommentToPost(@PathVariable Long id, @RequestBody Comment reqComment, Principal principal) {
 		Optional<RedditPost> post = redditPostRepository.findById(id);
-		if (post.isPresent() && authenticatedUser != null) {
+		if (post.isPresent() && principal != null) {
+			Optional<User> user = userRepository.findByUsername(principal.getName());
 			Comment comment = new Comment();
 			comment.setPost(post.get());
-			comment.setUser(authenticatedUser.getUser());
+			comment.setUser(user.get());
 			comment.setText(reqComment.getText());
 			comment.setVotes(1);
 			commentRepository.save(comment);

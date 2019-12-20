@@ -16,12 +16,12 @@
 							"basic": [
 								{
 									"key": "password",
-									"value": "asd",
+									"value": "foo",
 									"type": "string"
 								},
 								{
 									"key": "username",
-									"value": "asd",
+									"value": "foo",
 									"type": "string"
 								}
 							]
@@ -29,7 +29,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/users",
+							"raw": "http://localhost:8080/api/users/me",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -37,7 +37,8 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"users"
+								"users",
+								"me"
 							]
 						}
 					},
@@ -227,7 +228,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\": \"Uservalami1\",\n\t\"password\": \"this is totally secure\"\n}",
+							"raw": "{\n\t\"username\": \"foo\",\n\t\"password\": \"foo\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -245,6 +246,49 @@
 								"api",
 								"users",
 								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/api/users/login",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "foo",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "foo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"login"
 							]
 						}
 					},
