@@ -70,11 +70,10 @@ public class UserController {
 
 		String date = new Date(System.currentTimeMillis()).toString();
 
-		if (authenticatedUser.getUser() == null) {
+		if (principal == null) {
 			return new ResponseEntity(new ApiResponse(418, "User not logged in", date), HttpStatus.I_AM_A_TEAPOT);
 		}
 
-		authenticatedUser.setUser(null);
 		return new ResponseEntity(new ApiResponse(200, "Successfully logged out", date), HttpStatus.OK);
 	}
 
